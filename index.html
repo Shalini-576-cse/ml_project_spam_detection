@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spam Detector Pro</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="main">
+      <h1>Spam Detector <span>Pro</span></h1>
+
+      <!-- Metrics -->
+      <div class="metrics">
+        <div class="card">Accuracy <br /><b>{{accuracy}}%</b></div>
+        <div class="card">Precision <br /><b>{{precision}}%</b></div>
+        <div class="card">Recall <br /><b>{{recall}}%</b></div>
+        <div class="card">F1 Score <br /><b>{{f1}}</b></div>
+        <div class="card">Vocabulary <br /><b>{{vocab}}</b></div>
+        <div class="card">Messages <br /><b>{{total}}</b></div>
+      </div>
+
+      <!-- Input -->
+      <form method="POST">
+        <textarea name="message" placeholder="Paste your message...">
+{{ message }}</textarea
+        >
+
+        <div class="buttons">
+          <button type="submit">Analyze</button>
+          <button type="button" onclick="clearBox()">Clear</button>
+        </div>
+      </form>
+
+      <!-- Result -->
+      {% if result %}
+      <div class="result-box">
+        <h2 class="{{ 'spam' if result == 'Spam' else 'ham' }}">
+          {{ result }}
+        </h2>
+
+        <p>🚫 Spam Probability: <b>{{spam_prob}}%</b></p>
+        <p>✅ Not Spam Probability: <b>{{ham_prob}}%</b></p>
+      </div>
+      {% endif %}
+
+      <!-- Samples -->
+      <div class="samples">
+        <span onclick="fill('Congratulations! You won a free lottery')"
+          >Spam Example</span
+        >
+        <span onclick="fill('Free entry in weekly contest')">Spam #2</span>
+        <span onclick="fill('Hey, are we meeting today?')">Normal Message</span>
+        <span onclick="fill('Call me when you are free')">Friendly</span>
+      </div>
+    </div>
+
+    <script>
+      function fill(text) {
+        document.querySelector("textarea").value = text;
+      }
+      function clearBox() {
+        document.querySelector("textarea").value = "";
+      }
+    </script>
+
+    {% if highlighted_msg %}
+    <p>Highlighted Message:</p>
+    <p>{{ highlighted_msg | safe }}</p>
+    {% endif %}
+  </body>
+</html>
